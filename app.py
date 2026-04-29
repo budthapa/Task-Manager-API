@@ -1,6 +1,7 @@
 from typing import Union
 from litestar import Litestar, get
 
+import TodoController
 from data_list import add_item, delete_item, get_list, get_todos, update_item
 
 # using typing.Union to allow for both string and boolean values in the TODO_LIST
@@ -19,4 +20,4 @@ TODO_LIST: list[dict[str, Union[str, bool]]] = [
 async def get_todo_list() -> list[dict[str, Union[str, bool]]]:
     return TODO_LIST
 
-app = Litestar([get_todo_list, get_list, get_todos, add_item, update_item, delete_item])
+app = Litestar([get_todo_list, get_list, get_todos, add_item, update_item, delete_item, TodoController.TodoController])
