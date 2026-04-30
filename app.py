@@ -1,5 +1,4 @@
 from typing import Union
-from warnings import deprecated
 from litestar import Litestar, get
 
 from litestar.plugins.sqlalchemy import (
@@ -7,10 +6,11 @@ from litestar.plugins.sqlalchemy import (
     SQLAlchemySerializationPlugin,
 )
 
-from DBConnection import get_db_config, provide_transaction
+from database.config import get_db_config, provide_transaction
 from TodoController import TodoController
 
 from data_list import add_item, delete_item, get_list, get_todos, update_item
+from person.controller import PersonController
 
 # using typing.Union to allow for both string and boolean values in the TODO_LIST
 # values can be strings or booleans, so we use Union to specify that in the type hint
@@ -30,11 +30,12 @@ async def get_todo_list() -> list[dict[str, Union[str, bool]]]:
 
 
 app = Litestar(
-    [get_todo_list, get_list, get_todos, add_item, update_item, delete_item, TodoController],
+    [get_todo_list, get_list, get_todos, add_item, update_item, delete_item, TodoController, PersonController],
     dependencies={"transaction": provide_transaction},
     plugins=[
         SQLAlchemySerializationPlugin(),
         SQLAlchemyInitPlugin(get_db_config()),
     ],
+    debug=True,
     
 )
